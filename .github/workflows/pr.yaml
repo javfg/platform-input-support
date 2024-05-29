@@ -20,7 +20,7 @@ jobs:
             const labels = [];
 
             if (context.payload.pull_request) {
-              labels = context.payload.pull_requests.labels;
+              labels = context.payload.pull_request.labels;
             }
 
             const intersectionLabels = requiredLabels.filter(l => labels.includes(l));
