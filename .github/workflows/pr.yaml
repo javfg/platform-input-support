@@ -19,6 +19,8 @@ jobs:
             const requiredLabels = ['Major', 'Minor', 'Patch'];
             const labels = [];
 
+            console.log("context", context.payload);
+
             if (context.payload.pull_request) {
               labels = context.payload.pull_request.labels;
             }
