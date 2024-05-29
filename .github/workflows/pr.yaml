@@ -6,6 +6,8 @@ on:
       - opened
       - edited
       - synchronize
+      - labeled
+      - unlabeled
 
 jobs:
   audit:
@@ -32,7 +34,7 @@ jobs:
               core.setOutput('result', `The PR has the correct label: ${intersectionLabels[0]}`);
             }
 
-      - name: Show check
+      - name: Check release labels output
         uses: LouisBrunner/checks-action@v2.0.0
         if: always()
         with:
