@@ -1,0 +1,30 @@
+name: Pull Request Audit
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const requiredLabels = ['Major', 'Minor', 'Patch'];
+            const labels = [];
+
+            if (context.payload.pull_request) {
+              labels = context.payload.pull_requests.labels;
+            }
+
+            const intersectionLabels = requiredLabels.filter(l => labels.includes(l));
+
+            if (intersectionLabels.length !== 1) {
+              core.setFailed('The PR must have exactly one label from Major, Minor, Patch (this is used to bump the version number in the release process).');
+            }
