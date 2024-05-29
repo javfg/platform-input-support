@@ -13,6 +13,7 @@ jobs:
 
     steps:
       - name: Check release labels
+        id: check-labels
         uses: actions/github-script@v7
         with:
           script: |
@@ -29,4 +30,16 @@ jobs:
 
             if (intersectionLabels.length !== 1) {
               core.setFailed('The PR must have exactly one label from Major, Minor, Patch (this is used to bump the version number in the release process).');
+            } else {
+              core.setOutput('result', `The PR has the correct label: ${intersectionLabels[0]}`);
             }
+
+      - name: Show check
+        uses: LouisBrunner/checks-action@v2.0.0
+        if: always()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: 'Check release labels'
+          conclusion: ${{ job.status }}
+          output: |
+            {"summary":"${{ steps.check-labels.outputs.result }}"}
