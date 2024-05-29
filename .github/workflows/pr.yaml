@@ -1,4 +1,4 @@
-name: Pull Request Audit
+name: Pull Request
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ on:
       - unlabeled
 
 jobs:
-  audit:
+  labels:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,15 +26,22 @@ jobs:
               labels = context.payload.pull_request.labels;
             }
 
+
             const intersectionLabels = requiredLabels.filter(l => labels.includes(l));
 
+            console.log('requiredLabels', requiredLabels);
+            console.log('labels', labels);
+            console.log('intersectionLabels', intersectionLabels);
+
             if (intersectionLabels.length !== 1) {
-              core.setFailed('The PR must have exactly one label from Major, Minor, Patch (this is used to bump the version number in the release process).');
+              const msg = "The PR must have exactly one label from Major, Minor, Patch (this is used to bump the version number in the release process).";
+              core.setFailed(msg);
+              core.setOutput('result', msg);
             } else {
-              core.setOutput('result', `The PR has the correct label: ${intersectionLabels[0]}`);
+              core.setOutput('result', `The PR has a correct release label: ${intersectionLabels[0]}`);
             }
 
-      - name: Check release labels output
+      - name: Output to check actions
         uses: LouisBrunner/checks-action@v2.0.0
         if: always()
         with:
