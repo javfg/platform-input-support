@@ -12,12 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repo
+      - name: Check release labels
         uses: actions/github-script@v7
         with:
           script: |
             const requiredLabels = ['Major', 'Minor', 'Patch'];
-            const labels = [];
+            let labels = [];
 
             console.log("context", context.payload);
 
