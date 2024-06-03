@@ -1,4 +1,4 @@
-FROM python:3.8.18-slim-bullseye
+FROM python:3.8.19-slim-bullseye
 
 # install helper utilities, including Apache Jena (RIOT provider)
 RUN apt update; \
@@ -10,7 +10,7 @@ RUN mkdir /tmp; \
     rm apache-jena.tar.gz
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | \
     tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
-    apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -y && apt-get install google-cloud-cli -y   
+    apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && apt-get update -y && apt-get install google-cloud-cli -y
 
 
 # Copy the pipeline source tree
