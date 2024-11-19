@@ -1,0 +1,500 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>helpers package &mdash; platform-input-support  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
+
+  
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="manifest package" href="platform_input_support.manifest.html" />
+    <link rel="prev" title="config package" href="platform_input_support.config.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            platform-input-support
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="platform_input_support.config.html">config package</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">helpers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-platform_input_support.helpers.download">helpers.download module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#platform_input_support.helpers.download.AbortableStreamWrapper"><code class="docutils literal notranslate"><span class="pre">AbortableStreamWrapper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.download.AbortableStreamWrapper.read"><code class="docutils literal notranslate"><span class="pre">AbortableStreamWrapper.read()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#platform_input_support.helpers.download.DownloadHelper"><code class="docutils literal notranslate"><span class="pre">DownloadHelper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.download.DownloadHelper.download"><code class="docutils literal notranslate"><span class="pre">DownloadHelper.download()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#platform_input_support.helpers.download.Downloader"><code class="docutils literal notranslate"><span class="pre">Downloader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.download.Downloader.download"><code class="docutils literal notranslate"><span class="pre">Downloader.download()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#platform_input_support.helpers.download.GoogleSheetsDownloader"><code class="docutils literal notranslate"><span class="pre">GoogleSheetsDownloader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.download.GoogleSheetsDownloader.download"><code class="docutils literal notranslate"><span class="pre">GoogleSheetsDownloader.download()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#platform_input_support.helpers.download.GoogleStorageDownloader"><code class="docutils literal notranslate"><span class="pre">GoogleStorageDownloader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.download.GoogleStorageDownloader.download"><code class="docutils literal notranslate"><span class="pre">GoogleStorageDownloader.download()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#platform_input_support.helpers.download.HttpDownloader"><code class="docutils literal notranslate"><span class="pre">HttpDownloader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.download.HttpDownloader.download"><code class="docutils literal notranslate"><span class="pre">HttpDownloader.download()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#platform_input_support.helpers.download.download"><code class="docutils literal notranslate"><span class="pre">download()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-platform_input_support.helpers.google">helpers.google module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#platform_input_support.helpers.google.GoogleHelper"><code class="docutils literal notranslate"><span class="pre">GoogleHelper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.google.GoogleHelper.bucket_exists"><code class="docutils literal notranslate"><span class="pre">GoogleHelper.bucket_exists()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.google.GoogleHelper.download_to_file"><code class="docutils literal notranslate"><span class="pre">GoogleHelper.download_to_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.google.GoogleHelper.download_to_string"><code class="docutils literal notranslate"><span class="pre">GoogleHelper.download_to_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.google.GoogleHelper.get_modification_date"><code class="docutils literal notranslate"><span class="pre">GoogleHelper.get_modification_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.google.GoogleHelper.get_newest"><code class="docutils literal notranslate"><span class="pre">GoogleHelper.get_newest()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.google.GoogleHelper.get_session"><code class="docutils literal notranslate"><span class="pre">GoogleHelper.get_session()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.google.GoogleHelper.list_blobs"><code class="docutils literal notranslate"><span class="pre">GoogleHelper.list_blobs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.google.GoogleHelper.upload"><code class="docutils literal notranslate"><span class="pre">GoogleHelper.upload()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#platform_input_support.helpers.google.GoogleHelper.upload_safe"><code class="docutils literal notranslate"><span class="pre">GoogleHelper.upload_safe()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-platform_input_support.helpers">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#platform_input_support.helpers.google_helper"><code class="docutils literal notranslate"><span class="pre">google_helper()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#platform_input_support.helpers.init_google_helper"><code class="docutils literal notranslate"><span class="pre">init_google_helper()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="platform_input_support.manifest.html">manifest package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="platform_input_support.step.html">step package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="platform_input_support.task.html">task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="platform_input_support.tasks.html">tasks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="platform_input_support.util.html">util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="platform_input_support.validators.html">validators package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">platform-input-support</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">helpers package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/platform_input_support.helpers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="helpers-package">
+<h1>helpers package<a class="headerlink" href="#helpers-package" title="Link to this heading">¶</a></h1>
+<p>This package contains utilities used in multiple places throughout the application.</p>
+<section id="module-platform_input_support.helpers.download">
+<span id="helpers-download-module"></span><h2>helpers.download module<a class="headerlink" href="#module-platform_input_support.helpers.download" title="Link to this heading">¶</a></h2>
+<p>Helper that downloads files from various sources.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.AbortableStreamWrapper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">platform_input_support.helpers.download.</span></span><span class="sig-name descname"><span class="pre">AbortableStreamWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#AbortableStreamWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.AbortableStreamWrapper" title="Link to this definition">¶</a></dt>
+<dd><p>A wrapper around a stream that can be aborted.</p>
+<p>This class wraps a stream and in every read operation, it will raise a
+<a class="reference internal" href="platform_input_support.util.html#platform_input_support.util.errors.TaskAbortedError" title="platform_input_support.util.errors.TaskAbortedError"><code class="xref py py-class docutils literal notranslate"><span class="pre">platform_input_support.util.errors.TaskAbortedError</span></code></a> if the abort event
+is set. This is useful to abort downloads when another task fails.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.AbortableStreamWrapper.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#AbortableStreamWrapper.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.AbortableStreamWrapper.read" title="Link to this definition">¶</a></dt>
+<dd><p>Read from the stream and raise TaskAbortedError if the abort event is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The data read from the stream.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bytes</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="platform_input_support.util.html#platform_input_support.util.errors.TaskAbortedError" title="platform_input_support.util.errors.TaskAbortedError"><strong>TaskAbortedError</strong></a> – If the abort event is set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.DownloadHelper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">platform_input_support.helpers.download.</span></span><span class="sig-name descname"><span class="pre">DownloadHelper</span></span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#DownloadHelper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.DownloadHelper" title="Link to this definition">¶</a></dt>
+<dd><p>Helper that downloads files from various sources.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.DownloadHelper.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#DownloadHelper.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.DownloadHelper.download" title="Link to this definition">¶</a></dt>
+<dd><p>Download a file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.Downloader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">platform_input_support.helpers.download.</span></span><span class="sig-name descname"><span class="pre">Downloader</span></span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#Downloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.Downloader" title="Link to this definition">¶</a></dt>
+<dd><p>Base class for downloaders.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.Downloader.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#Downloader.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.Downloader.download" title="Link to this definition">¶</a></dt>
+<dd><p>Download a file from a source to a destination.</p>
+<p>This method is a no-op and should be overridden by subclasses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>str</em>) – The source URL.</p></li>
+<li><p><strong>dst</strong> (<em>Path</em>) – The destination path.</p></li>
+<li><p><strong>abort</strong> (<em>Event</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – An event that can be set to abort the download, defaults to <cite>None</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The destination path.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.GoogleSheetsDownloader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">platform_input_support.helpers.download.</span></span><span class="sig-name descname"><span class="pre">GoogleSheetsDownloader</span></span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#GoogleSheetsDownloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.GoogleSheetsDownloader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#platform_input_support.helpers.download.Downloader" title="platform_input_support.helpers.download.Downloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Downloader</span></code></a></p>
+<p>Downloader for Google Sheets URLs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.GoogleSheetsDownloader.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#GoogleSheetsDownloader.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.GoogleSheetsDownloader.download" title="Link to this definition">¶</a></dt>
+<dd><p>Download a Google Sheet.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.GoogleStorageDownloader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">platform_input_support.helpers.download.</span></span><span class="sig-name descname"><span class="pre">GoogleStorageDownloader</span></span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#GoogleStorageDownloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.GoogleStorageDownloader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#platform_input_support.helpers.download.Downloader" title="platform_input_support.helpers.download.Downloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Downloader</span></code></a></p>
+<p>Downloader for Google Storage URLs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.GoogleStorageDownloader.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#GoogleStorageDownloader.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.GoogleStorageDownloader.download" title="Link to this definition">¶</a></dt>
+<dd><p>Download a file from Google Storage.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.HttpDownloader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">platform_input_support.helpers.download.</span></span><span class="sig-name descname"><span class="pre">HttpDownloader</span></span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#HttpDownloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.HttpDownloader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#platform_input_support.helpers.download.Downloader" title="platform_input_support.helpers.download.Downloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Downloader</span></code></a></p>
+<p>Downloader for HTTP and HTTPS URLs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.HttpDownloader.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#HttpDownloader.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.HttpDownloader.download" title="Link to this definition">¶</a></dt>
+<dd><p>Download a file from an HTTP or HTTPS URL.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="platform_input_support.helpers.download.download">
+<span class="sig-prename descclassname"><span class="pre">platform_input_support.helpers.download.</span></span><span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/download.html#download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.download.download" title="Link to this definition">¶</a></dt>
+<dd><p>Instantiate a DownloadHelper and download a file.</p>
+</dd></dl>
+
+</section>
+<section id="module-platform_input_support.helpers.google">
+<span id="helpers-google-module"></span><h2>helpers.google module<a class="headerlink" href="#module-platform_input_support.helpers.google" title="Link to this heading">¶</a></h2>
+<p>Google Cloud Storage helper module.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="platform_input_support.helpers.google.GoogleHelper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">platform_input_support.helpers.google.</span></span><span class="sig-name descname"><span class="pre">GoogleHelper</span></span><a class="reference internal" href="_modules/platform_input_support/helpers/google.html#GoogleHelper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.google.GoogleHelper" title="Link to this definition">¶</a></dt>
+<dd><p>Google Cloud Storage helper class.</p>
+<p>This class provides methods to interact with Google Cloud Storage. It stores the
+Google Cloud Storage client and credentials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>credentials</strong> (<em>google.auth.credentials.Credentials</em>) – The Google Cloud Storage credentials.</p></li>
+<li><p><strong>client</strong> (<em>google.cloud.storage.client.Client</em>) – The Google Cloud Storage client.</p></li>
+<li><p><strong>is_ready</strong> (<em>bool</em>) – A flag indicating if the helper is ready to use.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.google.GoogleHelper.bucket_exists">
+<span class="sig-name descname"><span class="pre">bucket_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/google.html#GoogleHelper.bucket_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.google.GoogleHelper.bucket_exists" title="Link to this definition">¶</a></dt>
+<dd><p>Check if a bucket exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>url</strong> (<em>str</em>) – The URL of the bucket.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the bucket exists, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.google.GoogleHelper.download_to_file">
+<span class="sig-name descname"><span class="pre">download_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/google.html#GoogleHelper.download_to_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.google.GoogleHelper.download_to_file" title="Link to this definition">¶</a></dt>
+<dd><p>Download a file from Google Cloud Storage to a local file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – The URL of the file to download.</p></li>
+<li><p><strong>destination</strong> (<em>Path</em>) – The destination path.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="platform_input_support.util.html#platform_input_support.util.errors.NotFoundError" title="platform_input_support.util.errors.NotFoundError"><strong>NotFoundError</strong></a> – If the file is not found.</p></li>
+<li><p><a class="reference internal" href="platform_input_support.util.html#platform_input_support.util.errors.HelperError" title="platform_input_support.util.errors.HelperError"><strong>HelperError</strong></a> – If an error occurs while downloading the file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.google.GoogleHelper.download_to_string">
+<span class="sig-name descname"><span class="pre">download_to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/google.html#GoogleHelper.download_to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.google.GoogleHelper.download_to_string" title="Link to this definition">¶</a></dt>
+<dd><p>Download a file from Google Cloud Storage and return its content as a string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>url</strong> (<em>str</em>) – The URL of the file to download.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="platform_input_support.util.html#platform_input_support.util.errors.NotFoundError" title="platform_input_support.util.errors.NotFoundError"><strong>NotFoundError</strong></a> – If the file is not found.</p></li>
+<li><p><a class="reference internal" href="platform_input_support.util.html#platform_input_support.util.errors.HelperError" title="platform_input_support.util.errors.HelperError"><strong>HelperError</strong></a> – If an error occurs while downloading the file.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing the file content and its generation number.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple[str, int] | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.google.GoogleHelper.get_modification_date">
+<span class="sig-name descname"><span class="pre">get_modification_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/google.html#GoogleHelper.get_modification_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.google.GoogleHelper.get_modification_date" title="Link to this definition">¶</a></dt>
+<dd><p>Get the modification date of a blob.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>url</strong> (<em>str</em>) – The URL of the blob.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The modification date of the blob.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>datetime | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.google.GoogleHelper.get_newest">
+<span class="sig-name descname"><span class="pre">get_newest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/google.html#GoogleHelper.get_newest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.google.GoogleHelper.get_newest" title="Link to this definition">¶</a></dt>
+<dd><p>Get the URL of the newest blob from a list of URLs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>url_list</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – A list of blob URLs.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="platform_input_support.util.html#platform_input_support.util.errors.HelperError" title="platform_input_support.util.errors.HelperError"><strong>HelperError</strong></a> – If there are multiple bucket names in the URLs.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The URL of the newest blob.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.google.GoogleHelper.get_session">
+<span class="sig-name descname"><span class="pre">get_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AuthorizedSession</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/google.html#GoogleHelper.get_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.google.GoogleHelper.get_session" title="Link to this definition">¶</a></dt>
+<dd><p>Get the current authenticated session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An authorized session.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>AuthorizedSession</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.google.GoogleHelper.list_blobs">
+<span class="sig-name descname"><span class="pre">list_blobs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/google.html#GoogleHelper.list_blobs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.google.GoogleHelper.list_blobs" title="Link to this definition">¶</a></dt>
+<dd><p>List blobs in a bucket.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – The URL of the bucket.</p></li>
+<li><p><strong>include</strong> (<em>str</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – A filter to include only blobs that contain this string, defaults to <cite>None</cite></p></li>
+<li><p><strong>exclude</strong> (<em>str</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – A filter to exclude blobs that contain this string, defaults to <cite>None</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of blob URLs.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.google.GoogleHelper.upload">
+<span class="sig-name descname"><span class="pre">upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/google.html#GoogleHelper.upload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.google.GoogleHelper.upload" title="Link to this definition">¶</a></dt>
+<dd><p>Upload a file to Google Cloud Storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>Path</em>) – The source file.</p></li>
+<li><p><strong>destination</strong> (<em>str</em>) – The destination URL.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="platform_input_support.util.html#platform_input_support.util.errors.HelperError" title="platform_input_support.util.errors.HelperError"><strong>HelperError</strong></a> – If an error occurs while uploading the file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="platform_input_support.helpers.google.GoogleHelper.upload_safe">
+<span class="sig-name descname"><span class="pre">upload_safe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/platform_input_support/helpers/google.html#GoogleHelper.upload_safe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.google.GoogleHelper.upload_safe" title="Link to this definition">¶</a></dt>
+<dd><p>Upload a file to Google Cloud Storage, ensuring the generation matches.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<em>str</em>) – The file content.</p></li>
+<li><p><strong>destination</strong> (<em>str</em>) – The destination URL.</p></li>
+<li><p><strong>generation</strong> (<em>int</em>) – The expected generation number of the current remote version.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="platform_input_support.util.html#platform_input_support.util.errors.PreconditionFailedError" title="platform_input_support.util.errors.PreconditionFailedError"><strong>PreconditionFailedError</strong></a> – If the generation number does not match.</p></li>
+<li><p><a class="reference internal" href="platform_input_support.util.html#platform_input_support.util.errors.HelperError" title="platform_input_support.util.errors.HelperError"><strong>HelperError</strong></a> – If an error occurs while uploading the file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-platform_input_support.helpers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-platform_input_support.helpers" title="Link to this heading">¶</a></h2>
+<p>Helpers are common utilities used throughout the application.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="platform_input_support.helpers.google_helper">
+<span class="sig-prename descclassname"><span class="pre">platform_input_support.helpers.</span></span><span class="sig-name descname"><span class="pre">google_helper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/platform_input_support/helpers.html#google_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.google_helper" title="Link to this definition">¶</a></dt>
+<dd><p>Return the Google helper.</p>
+<p>The Google helper must be initialized explicitly by calling <a class="reference internal" href="#platform_input_support.helpers.init_google_helper" title="platform_input_support.helpers.init_google_helper"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_google_helper()</span></code></a>
+before trying to access it. If it is not initialized, a PISError is raised.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The Google helper.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#platform_input_support.helpers.google.GoogleHelper" title="platform_input_support.helpers.google.GoogleHelper">GoogleHelper</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="platform_input_support.util.html#platform_input_support.util.errors.PISError" title="platform_input_support.util.errors.PISError"><strong>PISError</strong></a> – If the Google helper is not initialized.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="platform_input_support.helpers.init_google_helper">
+<span class="sig-prename descclassname"><span class="pre">platform_input_support.helpers.</span></span><span class="sig-name descname"><span class="pre">init_google_helper</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/platform_input_support/helpers.html#init_google_helper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#platform_input_support.helpers.init_google_helper" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the Google helper.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="platform_input_support.config.html" class="btn btn-neutral float-left" title="config package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="platform_input_support.manifest.html" class="btn btn-neutral float-right" title="manifest package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Open Targets Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

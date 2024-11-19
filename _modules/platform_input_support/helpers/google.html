@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>platform_input_support.helpers.google &mdash; platform-input-support  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/autodoc_pydantic.css" />
+
+  
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            platform-input-support
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../platform_input_support.config.html">config package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../platform_input_support.helpers.html">helpers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../platform_input_support.manifest.html">manifest package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../platform_input_support.step.html">step package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../platform_input_support.task.html">task package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../platform_input_support.tasks.html">tasks package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../platform_input_support.util.html">util package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../platform_input_support.validators.html">validators package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">platform-input-support</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../helpers.html">platform_input_support.helpers</a></li>
+      <li class="breadcrumb-item active">platform_input_support.helpers.google</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for platform_input_support.helpers.google</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Google Cloud Storage helper module.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">google</span> <span class="kn">import</span> <span class="n">auth</span>
+<span class="kn">from</span> <span class="nn">google.api_core.exceptions</span> <span class="kn">import</span> <span class="n">GoogleAPICallError</span><span class="p">,</span> <span class="n">PreconditionFailed</span>
+<span class="kn">from</span> <span class="nn">google.auth</span> <span class="kn">import</span> <span class="n">exceptions</span> <span class="k">as</span> <span class="n">auth_exceptions</span>
+<span class="kn">from</span> <span class="nn">google.auth.transport.requests</span> <span class="kn">import</span> <span class="n">AuthorizedSession</span>
+<span class="kn">from</span> <span class="nn">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+<span class="kn">from</span> <span class="nn">google.cloud.exceptions</span> <span class="kn">import</span> <span class="n">NotFound</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="kn">from</span> <span class="nn">platform_input_support.config</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">platform_input_support.util.errors</span> <span class="kn">import</span> <span class="n">HelperError</span><span class="p">,</span> <span class="n">NotFoundError</span><span class="p">,</span> <span class="n">PreconditionFailedError</span>
+
+<span class="n">GOOGLE_SCOPES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;https://www.googleapis.com/auth/cloud-platform&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;https://www.googleapis.com/auth/spreadsheets&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="GoogleHelper">
+<a class="viewcode-back" href="../../../platform_input_support.helpers.html#platform_input_support.helpers.google.GoogleHelper">[docs]</a>
+<span class="k">class</span> <span class="nc">GoogleHelper</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Google Cloud Storage helper class.</span>
+
+<span class="sd">    This class provides methods to interact with Google Cloud Storage. It stores the</span>
+<span class="sd">    Google Cloud Storage client and credentials.</span>
+
+<span class="sd">    :ivar credentials: The Google Cloud Storage credentials.</span>
+<span class="sd">    :vartype credentials: google.auth.credentials.Credentials</span>
+<span class="sd">    :ivar client: The Google Cloud Storage client.</span>
+<span class="sd">    :vartype client: google.cloud.storage.client.Client</span>
+<span class="sd">    :ivar is_ready: A flag indicating if the helper is ready to use.</span>
+<span class="sd">    :vartype is_ready: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">credentials</span><span class="p">,</span> <span class="n">project_id</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">scopes</span><span class="o">=</span><span class="n">GOOGLE_SCOPES</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;gcp authenticated on project </span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">auth_exceptions</span><span class="o">.</span><span class="n">DefaultCredentialsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error authenticating on gcp: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">credentials</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_ready</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">email</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">credentials</span><span class="p">,</span> <span class="s1">&#39;_service_account_email&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">email</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;service account </span><span class="si">{</span><span class="n">email</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">gcs_url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;gcs_url setting and PIS_GCS_URL env var are missing&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># check if the bucket exists</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">bucket_exists</span><span class="p">(</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">gcs_url</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">settings</span><span class="p">()</span><span class="o">.</span><span class="n">gcs_url</span><span class="si">}</span><span class="s1"> does not exist&#39;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">HelperError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error checking google cloud storage url: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># if the credentials are good and the bucket exists, the google helper is ready</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_ready</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_parse_url</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">):</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;https://&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;http://&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.storage.googleapis.com&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="n">url_parts</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;gs://&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">bucket_name</span> <span class="o">=</span> <span class="n">url_parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">bucket_re</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^[a-z0-9][a-z0-9-_.]{2,221}[a-z0-9]$&#39;</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">bucket_re</span><span class="p">,</span> <span class="n">bucket_name</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HelperError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;invalid bucket name: </span><span class="si">{</span><span class="n">bucket_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">url_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">url_parts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">bucket_name</span><span class="p">,</span> <span class="n">file_path</span>
+
+    <span class="k">def</span> <span class="nf">_get_bucket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bucket_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">storage</span><span class="o">.</span><span class="n">Bucket</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NotFound</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotFoundError</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">GoogleAPICallError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HelperError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;google api error checking bucket </span><span class="si">{</span><span class="n">bucket_name</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HelperError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error checking bucket </span><span class="si">{</span><span class="n">bucket_name</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_prepare_blob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bucket</span><span class="p">:</span> <span class="n">storage</span><span class="o">.</span><span class="n">Bucket</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">storage</span><span class="o">.</span><span class="n">Blob</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prefix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HelperError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;invalid prefix: </span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">blob</span> <span class="o">=</span> <span class="n">bucket</span><span class="o">.</span><span class="n">blob</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">GoogleAPICallError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HelperError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error preparing blob: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">blob</span>
+
+<div class="viewcode-block" id="GoogleHelper.bucket_exists">
+<a class="viewcode-back" href="../../../platform_input_support.helpers.html#platform_input_support.helpers.google.GoogleHelper.bucket_exists">[docs]</a>
+    <span class="k">def</span> <span class="nf">bucket_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if a bucket exists.</span>
+
+<span class="sd">        :param url: The URL of the bucket.</span>
+<span class="sd">        :type url: str</span>
+<span class="sd">        :return: True if the bucket exists, False otherwise.</span>
+<span class="sd">        :rtype: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">bucket_name</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NotFoundError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;bucket </span><span class="si">{</span><span class="n">bucket_name</span><span class="si">}</span><span class="s1"> not found&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;bucket </span><span class="si">{</span><span class="n">bucket_name</span><span class="si">}</span><span class="s1"> exists and is readable&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="GoogleHelper.download_to_string">
+<a class="viewcode-back" href="../../../platform_input_support.helpers.html#platform_input_support.helpers.google.GoogleHelper.download_to_string">[docs]</a>
+    <span class="k">def</span> <span class="nf">download_to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Download a file from Google Cloud Storage and return its content as a string.</span>
+
+<span class="sd">        :param url: The URL of the file to download.</span>
+<span class="sd">        :type url: str</span>
+<span class="sd">        :raises NotFoundError: If the file is not found.</span>
+<span class="sd">        :raises HelperError: If an error occurs while downloading the file.</span>
+<span class="sd">        :return: A tuple containing the file content and its generation number.</span>
+<span class="sd">        :rtype: tuple[str, int] | None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">bucket_name</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">bucket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+        <span class="n">blob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_blob</span><span class="p">(</span><span class="n">bucket</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">blob_str</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">download_as_string</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">NotFound</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;file </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1"> not found&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">NotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;file </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1"> not found&#39;</span><span class="p">)</span>
+
+        <span class="n">decoded_blob</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">decoded_blob</span> <span class="o">=</span> <span class="n">blob_str</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">UnicodeDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HelperError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error decoding file </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">blob</span><span class="o">.</span><span class="n">generation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">decoded_blob</span><span class="p">,</span> <span class="n">blob</span><span class="o">.</span><span class="n">generation</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GoogleHelper.download_to_file">
+<a class="viewcode-back" href="../../../platform_input_support.helpers.html#platform_input_support.helpers.google.GoogleHelper.download_to_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">download_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">destination</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Download a file from Google Cloud Storage to a local file.</span>
+
+<span class="sd">        :param url: The URL of the file to download.</span>
+<span class="sd">        :type url: str</span>
+<span class="sd">        :param destination: The destination path.</span>
+<span class="sd">        :type destination: Path</span>
+<span class="sd">        :raises NotFoundError: If the file is not found.</span>
+<span class="sd">        :raises HelperError: If an error occurs while downloading the file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span>
+        <span class="n">bucket_name</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">bucket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+        <span class="n">blob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_blob</span><span class="p">(</span><span class="n">bucket</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">blob</span><span class="o">.</span><span class="n">download_to_filename</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">NotFound</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotFoundError</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">GoogleAPICallError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HelperError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error downloading </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;download completed&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GoogleHelper.upload">
+<a class="viewcode-back" href="../../../platform_input_support.helpers.html#platform_input_support.helpers.google.GoogleHelper.upload">[docs]</a>
+    <span class="k">def</span> <span class="nf">upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">destination</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Upload a file to Google Cloud Storage.</span>
+
+<span class="sd">        :param source: The source file.</span>
+<span class="sd">        :type source: Path</span>
+<span class="sd">        :param destination: The destination URL.</span>
+<span class="sd">        :type destination: str</span>
+<span class="sd">        :raises HelperError: If an error occurs while uploading the file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span>
+        <span class="n">bucket_name</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_url</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span>
+        <span class="n">bucket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+        <span class="n">blob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_blob</span><span class="p">(</span><span class="n">bucket</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">blob</span><span class="o">.</span><span class="n">upload_from_filename</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">GoogleAPICallError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HelperError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error uploading </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;uploaded </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s1"> to </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GoogleHelper.upload_safe">
+<a class="viewcode-back" href="../../../platform_input_support.helpers.html#platform_input_support.helpers.google.GoogleHelper.upload_safe">[docs]</a>
+    <span class="k">def</span> <span class="nf">upload_safe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">destination</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">generation</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Upload a file to Google Cloud Storage, ensuring the generation matches.</span>
+
+<span class="sd">        :param content: The file content.</span>
+<span class="sd">        :type content: str</span>
+<span class="sd">        :param destination: The destination URL.</span>
+<span class="sd">        :type destination: str</span>
+<span class="sd">        :param generation: The expected generation number of the current remote version.</span>
+<span class="sd">        :type generation: int</span>
+<span class="sd">        :raises PreconditionFailedError: If the generation number does not match.</span>
+<span class="sd">        :raises HelperError: If an error occurs while uploading the file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span>
+        <span class="n">bucket_name</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_url</span><span class="p">(</span><span class="n">destination</span><span class="p">)</span>
+        <span class="n">bucket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+        <span class="n">blob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_blob</span><span class="p">(</span><span class="n">bucket</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">blob</span><span class="o">.</span><span class="n">upload_from_string</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">if_generation_match</span><span class="o">=</span><span class="n">generation</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">PreconditionFailed</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;file upload failed due to generation mismatch&#39;</span><span class="p">)</span>
+            <span class="n">blob</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="n">PreconditionFailedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;generation mismatch: local=</span><span class="si">{</span><span class="n">generation</span><span class="si">}</span><span class="s1">, remote=</span><span class="si">{</span><span class="n">blob</span><span class="o">.</span><span class="n">generation</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">GoogleAPICallError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HelperError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error uploading file to </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;uploaded blob to </span><span class="si">{</span><span class="n">destination</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_is_blob_shallow</span><span class="p">(</span><span class="n">blob_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># make sure we select the given path, not all prefixes</span>
+        <span class="k">if</span> <span class="n">prefix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">prefix</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s1">/&#39;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">blob_name</span> <span class="ow">or</span> <span class="n">blob_name</span> <span class="o">==</span> <span class="n">prefix</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">blob_name</span> <span class="o">=</span> <span class="n">blob_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">prefix</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;/&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">blob_name</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">blob_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GoogleHelper.list_blobs">
+<a class="viewcode-back" href="../../../platform_input_support.helpers.html#platform_input_support.helpers.google.GoogleHelper.list_blobs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_blobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">include</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List blobs in a bucket.</span>
+
+<span class="sd">        :param url: The URL of the bucket.</span>
+<span class="sd">        :type url: str</span>
+<span class="sd">        :param include: A filter to include only blobs that contain this string, defaults to `None`</span>
+<span class="sd">        :type include: str | None, optional</span>
+<span class="sd">        :param exclude: A filter to exclude blobs that contain this string, defaults to `None`</span>
+<span class="sd">        :type exclude: str | None, optional</span>
+<span class="sd">        :return: A list of blob URLs.</span>
+<span class="sd">        :rtype: list[str]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">bucket_name</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">bucket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+
+        <span class="n">blob_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">bucket</span><span class="o">.</span><span class="n">list_blobs</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">))]</span>
+
+        <span class="c1"># filter out blobs that have longer prefixes</span>
+        <span class="n">blob_name_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">blob_names</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_blob_shallow</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)]</span>
+
+        <span class="c1"># filter out blobs using include/exclude</span>
+        <span class="k">if</span> <span class="n">include</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">blob_name_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">blob_name</span> <span class="k">for</span> <span class="n">blob_name</span> <span class="ow">in</span> <span class="n">blob_name_list</span> <span class="k">if</span> <span class="n">include</span> <span class="ow">in</span> <span class="n">blob_name</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">exclude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">blob_name_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">blob_name</span> <span class="k">for</span> <span class="n">blob_name</span> <span class="ow">in</span> <span class="n">blob_name_list</span> <span class="k">if</span> <span class="n">exclude</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">blob_name</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">blob_name_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;no files found in </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;gs://</span><span class="si">{</span><span class="n">bucket_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">blob_name</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">blob_name</span> <span class="ow">in</span> <span class="n">blob_name_list</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="GoogleHelper.get_modification_date">
+<a class="viewcode-back" href="../../../platform_input_support.helpers.html#platform_input_support.helpers.google.GoogleHelper.get_modification_date">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_modification_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the modification date of a blob.</span>
+
+<span class="sd">        :param url: The URL of the blob.</span>
+<span class="sd">        :type url: str</span>
+<span class="sd">        :return: The modification date of the blob.</span>
+<span class="sd">        :rtype: datetime | None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">bucket_name</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">bucket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+        <span class="n">blob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_blob</span><span class="p">(</span><span class="n">bucket</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+        <span class="n">blob</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">blob</span><span class="o">.</span><span class="n">updated</span></div>
+
+
+<div class="viewcode-block" id="GoogleHelper.get_newest">
+<a class="viewcode-back" href="../../../platform_input_support.helpers.html#platform_input_support.helpers.google.GoogleHelper.get_newest">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_newest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the URL of the newest blob from a list of URLs.</span>
+
+<span class="sd">        :param url_list: A list of blob URLs.</span>
+<span class="sd">        :type url_list: list[str]</span>
+<span class="sd">        :raises HelperError: If there are multiple bucket names in the URLs.</span>
+<span class="sd">        :return: The URL of the newest blob.</span>
+<span class="sd">        :rtype: str | None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">url_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">url_list</span><span class="p">)</span>
+        <span class="n">bucket_names</span><span class="p">,</span> <span class="n">paths</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_parse_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">url_list</span><span class="p">],</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">bucket_names</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HelperError</span><span class="p">(</span><span class="s1">&#39;all urls must have the same bucket name&#39;</span><span class="p">)</span>
+
+        <span class="n">bucket_name</span> <span class="o">=</span> <span class="n">bucket_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">bucket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+
+        <span class="n">blobs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prepare_blob</span><span class="p">(</span><span class="n">bucket</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">]</span>
+        <span class="n">newest_date</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">newest_blob</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">blob</span> <span class="ow">in</span> <span class="n">blobs</span><span class="p">:</span>
+            <span class="n">blob</span><span class="o">.</span><span class="n">reload</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">blob</span><span class="o">.</span><span class="n">updated</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">newest_date</span> <span class="ow">or</span> <span class="n">blob</span><span class="o">.</span><span class="n">updated</span> <span class="o">&gt;</span> <span class="n">newest_date</span><span class="p">:</span>
+                <span class="n">newest_date</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">updated</span>
+                <span class="n">newest_blob</span> <span class="o">=</span> <span class="n">blob</span>
+
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;gs://</span><span class="si">{</span><span class="n">bucket_name</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">newest_blob</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">newest_blob</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="GoogleHelper.get_session">
+<a class="viewcode-back" href="../../../platform_input_support.helpers.html#platform_input_support.helpers.google.GoogleHelper.get_session">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AuthorizedSession</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the current authenticated session.</span>
+
+<span class="sd">        :return: An authorized session.</span>
+<span class="sd">        :rtype: AuthorizedSession</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">AuthorizedSession</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">credentials</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Open Targets Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
