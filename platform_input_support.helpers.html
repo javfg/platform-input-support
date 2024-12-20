@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>helpers package &mdash; pis  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
+
+  
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">helpers package</a><ul>
+<li><a class="reference internal" href="#module-pis.helpers.download">helpers.download module</a><ul>
+<li><a class="reference internal" href="#pis.helpers.download.AbortableStreamWrapper"><code class="docutils literal notranslate"><span class="pre">AbortableStreamWrapper</span></code></a><ul>
+<li><a class="reference internal" href="#pis.helpers.download.AbortableStreamWrapper.read"><code class="docutils literal notranslate"><span class="pre">AbortableStreamWrapper.read()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pis.helpers.download.DownloadHelper"><code class="docutils literal notranslate"><span class="pre">DownloadHelper</span></code></a><ul>
+<li><a class="reference internal" href="#pis.helpers.download.DownloadHelper.download"><code class="docutils literal notranslate"><span class="pre">DownloadHelper.download()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pis.helpers.download.Downloader"><code class="docutils literal notranslate"><span class="pre">Downloader</span></code></a><ul>
+<li><a class="reference internal" href="#pis.helpers.download.Downloader.download"><code class="docutils literal notranslate"><span class="pre">Downloader.download()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pis.helpers.download.GoogleSheetsDownloader"><code class="docutils literal notranslate"><span class="pre">GoogleSheetsDownloader</span></code></a><ul>
+<li><a class="reference internal" href="#pis.helpers.download.GoogleSheetsDownloader.download"><code class="docutils literal notranslate"><span class="pre">GoogleSheetsDownloader.download()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pis.helpers.download.GoogleStorageDownloader"><code class="docutils literal notranslate"><span class="pre">GoogleStorageDownloader</span></code></a><ul>
+<li><a class="reference internal" href="#pis.helpers.download.GoogleStorageDownloader.download"><code class="docutils literal notranslate"><span class="pre">GoogleStorageDownloader.download()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pis.helpers.download.HttpDownloader"><code class="docutils literal notranslate"><span class="pre">HttpDownloader</span></code></a><ul>
+<li><a class="reference internal" href="#pis.helpers.download.HttpDownloader.download"><code class="docutils literal notranslate"><span class="pre">HttpDownloader.download()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pis.helpers.download.download"><code class="docutils literal notranslate"><span class="pre">download()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#helpers-google-module">helpers.google module</a></li>
+<li><a class="reference internal" href="#module-pis.helpers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">helpers package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/platform_input_support.helpers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="helpers-package">
+<h1>helpers package<a class="headerlink" href="#helpers-package" title="Link to this heading">¶</a></h1>
+<p>This package contains utilities used in multiple places throughout the application.</p>
+<section id="module-pis.helpers.download">
+<span id="helpers-download-module"></span><h2>helpers.download module<a class="headerlink" href="#module-pis.helpers.download" title="Link to this heading">¶</a></h2>
+<p>Helper that downloads files from various sources.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pis.helpers.download.AbortableStreamWrapper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pis.helpers.download.</span></span><span class="sig-name descname"><span class="pre">AbortableStreamWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pis/helpers/download.html#AbortableStreamWrapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.AbortableStreamWrapper" title="Link to this definition">¶</a></dt>
+<dd><p>A wrapper around a stream that can be aborted.</p>
+<p>This class wraps a stream and in every read operation, it will raise a
+<a class="reference internal" href="platform_input_support.util.html#pis.util.errors.TaskAbortedError" title="pis.util.errors.TaskAbortedError"><code class="xref py py-class docutils literal notranslate"><span class="pre">pis.util.errors.TaskAbortedError</span></code></a> if the abort event
+is set. This is useful to abort downloads when another task fails.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pis.helpers.download.AbortableStreamWrapper.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/pis/helpers/download.html#AbortableStreamWrapper.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.AbortableStreamWrapper.read" title="Link to this definition">¶</a></dt>
+<dd><p>Read from the stream and raise TaskAbortedError if the abort event is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The data read from the stream.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bytes</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="platform_input_support.util.html#pis.util.errors.TaskAbortedError" title="pis.util.errors.TaskAbortedError"><strong>TaskAbortedError</strong></a> – If the abort event is set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pis.helpers.download.DownloadHelper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pis.helpers.download.</span></span><span class="sig-name descname"><span class="pre">DownloadHelper</span></span><a class="reference internal" href="_modules/pis/helpers/download.html#DownloadHelper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.DownloadHelper" title="Link to this definition">¶</a></dt>
+<dd><p>Helper that downloads files from various sources.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pis.helpers.download.DownloadHelper.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/pis/helpers/download.html#DownloadHelper.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.DownloadHelper.download" title="Link to this definition">¶</a></dt>
+<dd><p>Download a file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pis.helpers.download.Downloader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pis.helpers.download.</span></span><span class="sig-name descname"><span class="pre">Downloader</span></span><a class="reference internal" href="_modules/pis/helpers/download.html#Downloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.Downloader" title="Link to this definition">¶</a></dt>
+<dd><p>Base class for downloaders.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pis.helpers.download.Downloader.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/pis/helpers/download.html#Downloader.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.Downloader.download" title="Link to this definition">¶</a></dt>
+<dd><p>Download a file from a source to a destination.</p>
+<p>This method is a no-op and should be overridden by subclasses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>str</em>) – The source URL.</p></li>
+<li><p><strong>dst</strong> (<em>Path</em>) – The destination path.</p></li>
+<li><p><strong>abort</strong> (<em>Event</em><em> | </em><em>None</em><em>, </em><em>optional</em>) – An event that can be set to abort the download, defaults to <cite>None</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The destination path.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pis.helpers.download.GoogleSheetsDownloader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pis.helpers.download.</span></span><span class="sig-name descname"><span class="pre">GoogleSheetsDownloader</span></span><a class="reference internal" href="_modules/pis/helpers/download.html#GoogleSheetsDownloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.GoogleSheetsDownloader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pis.helpers.download.Downloader" title="pis.helpers.download.Downloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Downloader</span></code></a></p>
+<p>Downloader for Google Sheets URLs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pis.helpers.download.GoogleSheetsDownloader.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/pis/helpers/download.html#GoogleSheetsDownloader.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.GoogleSheetsDownloader.download" title="Link to this definition">¶</a></dt>
+<dd><p>Download a Google Sheet.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pis.helpers.download.GoogleStorageDownloader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pis.helpers.download.</span></span><span class="sig-name descname"><span class="pre">GoogleStorageDownloader</span></span><a class="reference internal" href="_modules/pis/helpers/download.html#GoogleStorageDownloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.GoogleStorageDownloader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pis.helpers.download.Downloader" title="pis.helpers.download.Downloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Downloader</span></code></a></p>
+<p>Downloader for Google Storage URLs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pis.helpers.download.GoogleStorageDownloader.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/pis/helpers/download.html#GoogleStorageDownloader.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.GoogleStorageDownloader.download" title="Link to this definition">¶</a></dt>
+<dd><p>Download a file from Google Storage.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pis.helpers.download.HttpDownloader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pis.helpers.download.</span></span><span class="sig-name descname"><span class="pre">HttpDownloader</span></span><a class="reference internal" href="_modules/pis/helpers/download.html#HttpDownloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.HttpDownloader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pis.helpers.download.Downloader" title="pis.helpers.download.Downloader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Downloader</span></code></a></p>
+<p>Downloader for HTTP and HTTPS URLs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pis.helpers.download.HttpDownloader.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/pis/helpers/download.html#HttpDownloader.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.HttpDownloader.download" title="Link to this definition">¶</a></dt>
+<dd><p>Download a file from an HTTP or HTTPS URL.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pis.helpers.download.download">
+<span class="sig-prename descclassname"><span class="pre">pis.helpers.download.</span></span><span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Event</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="_modules/pis/helpers/download.html#download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pis.helpers.download.download" title="Link to this definition">¶</a></dt>
+<dd><p>Instantiate a DownloadHelper and download a file.</p>
+</dd></dl>
+
+</section>
+<section id="helpers-google-module">
+<h2>helpers.google module<a class="headerlink" href="#helpers-google-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-pis.helpers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pis.helpers" title="Link to this heading">¶</a></h2>
+<p>Helper classes used throughout the application.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Open Targets Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
